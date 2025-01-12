@@ -106,13 +106,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void enviarEmail(String nome, String resumoPedido) {
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto:siteclour22345@gmail.com")); // only email apps should handle this
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822"); // Especificar MIME para apps de e-mail
+
+        // Definir o destinatário, assunto e corpo do e-mail
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"hamburgueriaz@contato.com.br"}); // Destinatário padrão
         intent.putExtra(Intent.EXTRA_SUBJECT, "Pedido de " + nome);
         intent.putExtra(Intent.EXTRA_TEXT, resumoPedido);
 
+        // Verificar se há um app para tratar o Intent
         if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
+            startActivity(Intent.createChooser(intent, "Escolha o App de E-mail"));
         }
     }
 }
